@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Broadcast Chat</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f0f0f0; padding: 20px; }
+    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; background: #fff; }
+    #status { margin-bottom: 10px; }
+    #input { width: 80%; }
+    button { width: 18%; }
+</style>
+</head>
+<body>
+<h2>Broadcast Chat</h2>
+<div id="status">Serverstatus: <span id="serverStatus">Nicht verbunden</span></div>
+<div id="chat"></div>
+<input type="text" id="input" placeholder="Nachricht...">
+<button onclick="sendMessage()">Senden</button>
+<button onclick="stopServer()">Server stoppen</button>
+
+<script>
+const serverIP = "192.168.0.98:8080";
+const ws = new WebSocket(`ws://${serverIP}`);
+
+const chat = document.getElementById('chat');
+const status = document.getElementById('serverStatus');
+
+ws.onopen = () => {
+    status.innerText = 'Verbunden';
+    appendMessage('System: Verbindung hergestellt.');
+};
+
+ws.onmessage = (event) => {
+    appendMessage(event.data);
+};
+
+ws.onclose = () => {
+    status.innerText = 'Getrennt';
+    appendMessage('System: Verbindung getrennt.');
+};
+
+ws.onerror = (err) => {
+    status.innerText = 'Fehler';
+    appendMessage('System: Fehler bei der Verbindung.');
+};
+
+function sendMessage() {
+    const input = document.getElementById('input');
+    if(input.value.trim() === '') return;
+    ws.send(input.value);
+    input.value = '';
+}
+
+function appendMessage(msg) {
+    const div = document.createElement('div');
+    div.textContent = msg;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function stopServer() {
+    if (ws.readyState === WebSocket.OPEN) {
+        ws.send("__STOP__");
+        console.log("Stop-Signal gesendet.");
+    } else {
+        console.log("Server ist nicht verbunden.");
+    }
+}
+</script>
+</body>
+</html>
