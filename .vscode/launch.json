@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Broadcast Server",
+            "request": "launch",
+            "mainClass": "Main",
+            "args": "start"
+        },
+        {
+            "type": "java",
+            "name": "Client 1",
+            "request": "launch",
+            "mainClass": "Main",
+            "args": "connect"
+        },
+        {
+            "type": "java",
+            "name": "Client 2",
+            "request": "launch",
+            "mainClass": "Main",
+            "args": "connect"
+        }
+    ]
+}

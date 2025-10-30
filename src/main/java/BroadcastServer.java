@@ -30,7 +30,7 @@ public class BroadcastServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from " + conn.getRemoteSocketAddress() + ": " + message);
-        broadcast(message); // sendet an alle
+        broadcast(message);
     }
 
     @Override
@@ -43,6 +43,7 @@ public class BroadcastServer extends WebSocketServer {
         System.out.println("Server started successfully!");
     }
 
+    @Override
     public void broadcast(String message) {
         synchronized (clients) {
             for (WebSocket client : clients) {

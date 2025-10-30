@@ -31,15 +31,16 @@ public class BroadcastClient extends WebSocketClient {
     }
 
     public void runClient() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter messages (type 'exit' to quit):");
-        while (true) {
-            String msg = scanner.nextLine();
-            if (msg.equalsIgnoreCase("exit")) {
-                close();
-                break;
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                String msg = scanner.nextLine();
+                if (msg.equalsIgnoreCase("exit")) {
+                    close();
+                    break;
+                }
+                send(msg);
             }
-            send(msg);
         }
     }
 }
